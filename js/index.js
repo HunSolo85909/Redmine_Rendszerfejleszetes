@@ -16,7 +16,7 @@ async function projektLeker()
     try{
         if(selectType.value=="-1")
         {
-            let valasz=await fetch("../php/index.php/projektOsszesLeker");
+            let valasz=await fetch("php/index.php/projektOsszesLeker");
             let adatok=await valasz.json();
             projektKiir(adatok);
         }
@@ -25,7 +25,7 @@ async function projektLeker()
             let adatKuldes = {
                 "projektTipus": selectType.value,
             };
-            let valasz = await fetch("../php/index.php/projektLeker", {
+            let valasz = await fetch("php/index.php/projektLeker", {
                 method: 'POST',
                 body: JSON.stringify(adatKuldes)
             });
@@ -85,7 +85,7 @@ function gombCreate()
 async function projektTipusLeker()
 {
     try{
-        let valasz=await fetch("../php/index.php/projektTipusLeker");
+        let valasz=await fetch("php/index.php/projektTipusLeker");
         let adatok=await valasz.json();
         projektTipusKiir(adatok);
     }
@@ -114,7 +114,7 @@ async function taskLeker()
         let adatKuldes = {
             "projektSzam": selectProject.value,
         };
-        let valasz = await fetch("../php/index.php/projektTaskLeker", {
+        let valasz = await fetch("php/index.php/projektTaskLeker", {
             method: 'POST',
             body: JSON.stringify(adatKuldes)
         });
@@ -174,7 +174,7 @@ async function taskHozzaad()
             "projektSzam": selectProject.value,
             "userID":sessionStorage.getItem("userID")
         };
-        let valasz = await fetch("../php/index.php/projektTaskFeltolt", {
+        let valasz = await fetch("php/index.php/projektTaskFeltolt", {
             method: 'POST',
             body: JSON.stringify(adatKuldes)
         });
@@ -196,7 +196,7 @@ async function managerTaskLeker()
         let adatKuldes={
             "userID":sessionStorage.getItem("userID")
         };
-        let valasz = await fetch("../php/index.php/managerTaskLeker", {
+        let valasz = await fetch("php/index.php/managerTaskLeker", {
             method: 'POST',
             body: JSON.stringify(adatKuldes)
         });
@@ -252,7 +252,7 @@ async function devLeker()
     let adatKuldes={
         "projektSzam":selectProject.value
     };
-    let valasz = await fetch("../php/index.php/devLeker", {
+    let valasz = await fetch("php/index.php/devLeker", {
         method: 'POST',
         body: JSON.stringify(adatKuldes)
     });
@@ -278,7 +278,7 @@ async function devHozzaad()
         "devSzam":devs.value,
         "projektSzam":selectProject.value
     };
-    let valasz = await fetch("../php/index.php/devHozzaad", {
+    let valasz = await fetch("php/index.php/devHozzaad", {
         method: 'POST',
         body: JSON.stringify(adatKuldes)
     });
@@ -297,5 +297,5 @@ selectType.addEventListener("change",projektLeker);
 saveTaskButton.addEventListener("click",taskHozzaad);
 saveDevButton.addEventListener("click",devHozzaad);
 logoutButton.addEventListener("click",function(){
-    window.location.href="../html/login.html";
+    window.location="index.html";
 });

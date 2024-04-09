@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Ápr 03. 20:58
--- Kiszolgáló verziója: 10.4.24-MariaDB
--- PHP verzió: 8.1.6
+-- Létrehozás ideje: 2024. Ápr 09. 20:29
+-- Kiszolgáló verziója: 10.4.32-MariaDB
+-- PHP verzió: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `redmine`
 --
+CREATE DATABASE IF NOT EXISTS `redmine` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_hungarian_ci;
+USE `redmine`;
 
 -- --------------------------------------------------------
 
@@ -29,8 +31,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `developers` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
@@ -49,9 +51,9 @@ INSERT INTO `developers` (`id`, `name`, `email`) VALUES
 
 CREATE TABLE `managers` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
@@ -70,9 +72,9 @@ INSERT INTO `managers` (`id`, `name`, `email`, `password`) VALUES
 
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `type_id` int(11) DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL
+  `description` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
@@ -111,7 +113,7 @@ INSERT INTO `project_developers` (`developer_id`, `project_id`) VALUES
 
 CREATE TABLE `project_types` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL
+  `name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
@@ -130,8 +132,8 @@ INSERT INTO `project_types` (`id`, `name`) VALUES
 
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `project_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `deadline` datetime DEFAULT NULL

@@ -1,7 +1,7 @@
 
 async function getUsers()
 {
-    let valasz=await fetch("../php/index.php/managerLeker");
+    let valasz=await fetch("php/index.php/managerLeker");
     let adatok=await valasz.json();
     login(adatok);
 }
@@ -17,7 +17,7 @@ function login(adatok)
         {
             sessionStorage.setItem("userID",adat.id);
             volt=true;
-            window.location.href="../html/index.html";
+            window.location="projects.html";
         }
     }
     if(!volt)
