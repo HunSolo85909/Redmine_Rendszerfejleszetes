@@ -235,7 +235,7 @@ function managerTaskKiir(adatok)
                 alert(adat.pname+": "+adat.name+" task expires soon at: "+adat.deadline);
             cardbody.classList.add("text-danger");
         }
-        date.innerHTML=adat.deadline.substring(0,10);
+        date.innerHTML=adat.deadline.toString().substring(0,10);
         
         cardheader.appendChild(title);
         cardbody.appendChild(date);
@@ -263,6 +263,14 @@ async function devLeker()
 function devKiir(adatok)
 {
     devs.innerHTML="";
+    if(adatok.valasz=="Nincs fejlesztő aki hozzáadható lenne a projekthez!")
+    {
+        let option=document.createElement("option");
+        option.value="-1";
+        option.innerHTML="No developers suitable for this project!";
+        devs.appendChild(option);
+        return;
+    }
     for(adat of adatok)
     {
         let option=document.createElement("option");
@@ -274,6 +282,11 @@ function devKiir(adatok)
 
 async function devHozzaad()
 {
+    if(devs.value=="-1" || selectProject.value=="-1")
+    {
+        alert("Invalid developer or project!");
+        return;
+    }
     let adatKuldes={
         "devSzam":devs.value,
         "projektSzam":selectProject.value
@@ -287,9 +300,16 @@ async function devHozzaad()
 }
 
 window.addEventListener("load",function(){
-    projektLeker();
-    projektTipusLeker();
-    managerTaskLeker();
+    if(!sessionStorage.getItem("userID"))
+    {
+        window.location.href="login.html";
+    }
+    else
+    {
+        projektLeker();
+        projektTipusLeker();
+        managerTaskLeker();
+    }
 });
 
 selectProject.addEventListener("change",taskLeker);
@@ -297,5 +317,5 @@ selectType.addEventListener("change",projektLeker);
 saveTaskButton.addEventListener("click",taskHozzaad);
 saveDevButton.addEventListener("click",devHozzaad);
 logoutButton.addEventListener("click",function(){
-    window.location="index.html";
+    window.location.href="login.html";
 });

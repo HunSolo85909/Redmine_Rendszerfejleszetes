@@ -6,6 +6,19 @@ async function getUsers()
     login(adatok);
 }
 
+async function dbCreate()
+{
+    try{
+        let valasz=await fetch("php/index.php/dbCreate");
+        let adatok=await valasz.json();
+        console.log(adatok.valasz);
+    }
+    catch(e)
+    {
+        console.log(e);
+    }
+}
+
 function login(adatok)
 {
     let user=document.getElementById("email").value;
@@ -17,7 +30,7 @@ function login(adatok)
         {
             sessionStorage.setItem("userID",adat.id);
             volt=true;
-            window.location="projects.html";
+            window.location.href="index.html";
         }
     }
     if(!volt)
@@ -32,4 +45,5 @@ function login(adatok)
 
 let btn=document.getElementById("login");
 
+window.addEventListener("load",dbCreate);
 btn.addEventListener("click",getUsers);

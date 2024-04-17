@@ -1,9 +1,9 @@
 <?php
-spl_autoload_register(function ($class) {
-    include "classes/".$class.".class.php";
-});
 
-$route=new Route($_SERVER["REQUEST_URI"]);
+namespace Redmine;
+
+require_once __DIR__ . "/../vendor/autoload.php";
+
+$route = new Route($_SERVER["REQUEST_URI"]);
 $route->urlRoute();
-
 ?>

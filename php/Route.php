@@ -1,4 +1,8 @@
 <?php
+
+namespace Redmine;
+
+require_once __DIR__ . "/../vendor/autoload.php";
 class Route{
     private $teljesUrl;
     private $url;
@@ -15,55 +19,62 @@ class Route{
             case "projektOsszesLeker":
                 {
                     $redmine=new Redmine();
-                    echo $redmine->projektOsszesLeker();
+                    echo json_encode($redmine->projektOsszesLeker());
                     break;
                 }
             case "projektLeker":
                 {
                     $redmine=new Redmine();
-                    echo $redmine->projektLeker($this->erkezettAdatok->projektTipus);
+                    echo json_encode($redmine->projektLeker($this->erkezettAdatok->projektTipus));
                     break;
                 }
             case "projektTipusLeker":
                 {
                     $redmine=new Redmine();
-                    echo $redmine->projektTipusLeker();
+                    echo json_encode($redmine->projektTipusLeker());
                     break;
                 }
             case "projektTaskLeker":
                 {
                     $redmine=new Redmine();
-                    echo $redmine->projektTaskLeker($this->erkezettAdatok->projektSzam);
+                    echo json_encode($redmine->projektTaskLeker($this->erkezettAdatok->projektSzam));
                     break;
                 }
             case "projektTaskFeltolt":
                 {
                     $redmine=new Redmine();
-                    echo $redmine->projektTaskFeltolt($this->erkezettAdatok->nev,$this->erkezettAdatok->leiras,$this->erkezettAdatok->datum, $this->erkezettAdatok->projektSzam, $this->erkezettAdatok->userID);
+                    echo json_encode($redmine->projektTaskFeltolt($this->erkezettAdatok->nev,$this->erkezettAdatok->leiras,$this->erkezettAdatok->datum, $this->erkezettAdatok->projektSzam, $this->erkezettAdatok->userID));
                     break;
                 }
             case "managerTaskLeker":
                 {
                     $redmine=new Redmine();
-                    echo $redmine->managerTaskLeker($this->erkezettAdatok->userID);
+                    echo json_encode($redmine->managerTaskLeker($this->erkezettAdatok->userID));
                     break;
                 }
             case "managerLeker":
                 {
                     $redmine=new Redmine();
-                    echo $redmine->managerLeker();
+                    echo json_encode($redmine->managerLeker());
                     break;
                 }
             case "devLeker":
                 {
                     $redmine=new Redmine();
-                    echo $redmine->devLeker($this->erkezettAdatok->projektSzam);
+                    echo json_encode($redmine->devLeker($this->erkezettAdatok->projektSzam));
                     break;
                 }
             case "devHozzaad":
                 {
                     $redmine=new Redmine();
-                    echo $redmine->devHozzaad($this->erkezettAdatok->devSzam,$this->erkezettAdatok->projektSzam);
+                    echo json_encode($redmine->devHozzaad($this->erkezettAdatok->devSzam,$this->erkezettAdatok->projektSzam));
+                    break;
+                }
+
+            case "dbCreate":
+                {
+                    $redmine=new Redmine();
+                    echo json_encode($redmine->dbCreate());
                     break;
                 }
             default:

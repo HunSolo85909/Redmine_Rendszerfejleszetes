@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Ápr 09. 20:29
+-- Létrehozás ideje: 2024. Ápr 11. 15:02
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `redmine`
 --
-CREATE DATABASE IF NOT EXISTS `redmine` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_hungarian_ci;
-USE `redmine`;
 
 -- --------------------------------------------------------
 
@@ -92,6 +90,7 @@ INSERT INTO `projects` (`id`, `name`, `type_id`, `description`) VALUES
 --
 
 CREATE TABLE `project_developers` (
+  `id` int(11) NOT NULL,
   `developer_id` int(11) DEFAULT NULL,
   `project_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
@@ -100,10 +99,9 @@ CREATE TABLE `project_developers` (
 -- A tábla adatainak kiíratása `project_developers`
 --
 
-INSERT INTO `project_developers` (`developer_id`, `project_id`) VALUES
-(1, 1),
-(2, 2),
-(2, 1);
+INSERT INTO `project_developers` (`id`, `developer_id`, `project_id`) VALUES
+(6, 1, 1),
+(9, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -175,6 +173,7 @@ ALTER TABLE `projects`
 -- A tábla indexei `project_developers`
 --
 ALTER TABLE `project_developers`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `project_id` (`project_id`),
   ADD KEY `developer_id` (`developer_id`);
 
@@ -215,6 +214,12 @@ ALTER TABLE `projects`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT a táblához `project_developers`
+--
+ALTER TABLE `project_developers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT a táblához `project_types`
 --
 ALTER TABLE `project_types`
@@ -224,7 +229,7 @@ ALTER TABLE `project_types`
 -- AUTO_INCREMENT a táblához `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Megkötések a kiírt táblákhoz
