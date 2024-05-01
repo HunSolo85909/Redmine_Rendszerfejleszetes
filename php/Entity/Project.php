@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\Table;
+use Doctrime\ORM\Mapping\JoinColumn;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[Entity]
@@ -58,7 +59,7 @@ class Project
         $this->name = $name;
     }
 
-    public function setTypeId(Type $type): void
+    public function setType(Type $type): void
     {
         $this->type = $type;
     }

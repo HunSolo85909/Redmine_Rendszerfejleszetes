@@ -76,11 +76,26 @@ class Developer
 
     public function expose() {
         //return get_object_vars($this);
-        $array=[
-            "id"=>$this->id,
-            "name"=>$this->name,
-            "email"=>$this->email
-        ];
+        if(!empty($this->developerProjects)) {
+            $projects = [];
+            foreach($this->developerProjects as $project) {
+                $projects[] = $project->getProject()->expose();
+            }
+            $array=[
+                "id"=>$this->id,
+                "name"=>$this->name,
+                "email"=>$this->email,
+                "projects"=>$projects
+            ];
+        }
+        else
+        {
+            $array=[
+                "id"=>$this->id,
+                "name"=>$this->name,
+                "email"=>$this->email,
+            ];
+        }
         return $array;
     }
 }

@@ -1,9 +1,49 @@
 
-async function getUsers()
+var entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  };
+  
+function escapeHtml (string) {
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+      return entityMap[s];
+    });
+}
+
+async function login()
 {
-    let valasz=await fetch("php/index.php/managerLeker");
-    let adatok=await valasz.json();
-    login(adatok);
+    email=escapeHtml(document.getElementById("email").value);
+    pwd=escapeHtml(document.getElementById("password").value);
+    let salt="sajt";
+    pwd=pwd+salt;
+    pwd=CryptoJS.SHA256(pwd).toString();
+    let adatKuldes={
+        "email":email,
+        "pwd":pwd
+    };
+    let valasz = await fetch("php/index.php/loginLeker", {
+        method: 'POST',
+        body: JSON.stringify(adatKuldes)
+    });
+    let adat = await valasz.json();
+    if(adat.valasz!="Hiba!")
+    {
+        window.location.href=adat.valasz.toString();
+    }
+    else
+    {
+        alert("Login failed! Please try again!");
+        document.getElementById("email").value="";
+        document.getElementById("password").value="";
+        email="";
+        pwd="";
+    }
 }
 
 async function dbCreate()
@@ -19,31 +59,7 @@ async function dbCreate()
     }
 }
 
-function login(adatok)
-{
-    let user=document.getElementById("email").value;
-    let pwd=document.getElementById("password").value;
-    let volt=false;
-    for(adat of adatok)
-    {
-        if(adat.email==user && adat.password==pwd)
-        {
-            sessionStorage.setItem("userID",adat.id);
-            volt=true;
-            window.location.href="index.html";
-        }
-    }
-    if(!volt)
-    {
-        alert("Login failed! Please try again!");
-        document.getElementById("email").value="";
-        document.getElementById("password").value="";
-        user="";
-        pwd="";
-    }
-}
-
 let btn=document.getElementById("login");
 
 window.addEventListener("load",dbCreate);
-btn.addEventListener("click",getUsers);
+btn.addEventListener("click",login);

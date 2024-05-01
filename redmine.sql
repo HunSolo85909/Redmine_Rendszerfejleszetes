@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Ápr 11. 15:02
+-- Létrehozás ideje: 2024. Ápr 19. 10:23
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -24,21 +24,41 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Tábla szerkezet ehhez a táblához `admins`
+--
+
+CREATE TABLE `admins` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `admins`
+--
+
+INSERT INTO `admins` (`id`, `name`, `email`, `password`) VALUES
+(1, 'Admin Isztrátor', 'admin@admin.hu', 'b7757eeba8adb25e0145e3300ba9d8e09978ee5e90825e7b8776104dbabfcd3d');
+
+-- --------------------------------------------------------
+
+--
 -- Tábla szerkezet ehhez a táblához `developers`
 --
 
 CREATE TABLE `developers` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `developers`
 --
 
 INSERT INTO `developers` (`id`, `name`, `email`) VALUES
-(1, 'Harnos Adrián', 'adrian@harnos.hu'),
+(1, 'Harnos Adrián', 'harnos.adrian@gmail.com'),
 (2, 'Dömök Martin', 'martin.domok2002@gmail.com');
 
 -- --------------------------------------------------------
@@ -49,18 +69,18 @@ INSERT INTO `developers` (`id`, `name`, `email`) VALUES
 
 CREATE TABLE `managers` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `managers`
 --
 
 INSERT INTO `managers` (`id`, `name`, `email`, `password`) VALUES
-(1, 'Heller Benedek', 'heller.benedek@gmail.com', 'beni123'),
-(2, 'Ferencz Kristóf', 'ferencz.kristof@gmail.com', 'kristof123');
+(1, 'Heller Benedek', 'heller.benedek@gmail.com', '6bbaaeb9febabd5f14ee0b8f769ab069a9f4eecb23db563fd3baa07611b4399a'),
+(2, 'Ferencz Kristóf', 'ferencz.kristof@gmail.com', 'e59ccefccb0aba4ded85708549bede11fd5cc22ec47c065a914eb26deb4c9fa5');
 
 -- --------------------------------------------------------
 
@@ -70,18 +90,18 @@ INSERT INTO `managers` (`id`, `name`, `email`, `password`) VALUES
 
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `type_id` int(11) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `type_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `projects`
 --
 
-INSERT INTO `projects` (`id`, `name`, `type_id`, `description`) VALUES
-(1, 'Platformer x', 2, 'The best platformer game ever'),
-(2, 'Vanenet.hu', 1, 'Checks if you have internet connection');
+INSERT INTO `projects` (`id`, `name`, `description`, `type_id`) VALUES
+(1, 'Platformer x', 'The best platformer game ever', 2),
+(2, 'Vanenet.hu', 'Checks if you have internet connection', 1);
 
 -- --------------------------------------------------------
 
@@ -93,15 +113,15 @@ CREATE TABLE `project_developers` (
   `id` int(11) NOT NULL,
   `developer_id` int(11) DEFAULT NULL,
   `project_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `project_developers`
 --
 
 INSERT INTO `project_developers` (`id`, `developer_id`, `project_id`) VALUES
-(6, 1, 1),
-(9, 2, 2);
+(1, 1, 1),
+(2, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -111,8 +131,8 @@ INSERT INTO `project_developers` (`id`, `developer_id`, `project_id`) VALUES
 
 CREATE TABLE `project_types` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `project_types`
@@ -130,25 +150,31 @@ INSERT INTO `project_types` (`id`, `name`) VALUES
 
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `deadline` datetime NOT NULL,
   `project_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `deadline` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `tasks`
 --
 
-INSERT INTO `tasks` (`id`, `name`, `description`, `project_id`, `user_id`, `deadline`) VALUES
-(2, 'Test automatization', 'auto tests', 1, 1, '2024-04-06 00:00:00'),
-(3, 'Backend', 'Backend with php', 2, 1, '2024-04-15 00:00:00'),
-(6, 'Frontend', 'Frontend for the website', 2, 2, '2024-04-12 00:00:00');
+INSERT INTO `tasks` (`id`, `name`, `description`, `deadline`, `project_id`, `user_id`) VALUES
+(1, 'Test automatization', 'auto tests', '2024-04-25 00:00:00', 1, 1),
+(2, 'Backend', 'Backend with php', '2024-04-30 00:00:00', 2, 1),
+(3, 'Frontend', 'Frontend for the website', '2024-05-12 00:00:00', 2, 2);
 
 --
 -- Indexek a kiírt táblákhoz
 --
+
+--
+-- A tábla indexei `admins`
+--
+ALTER TABLE `admins`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- A tábla indexei `developers`
@@ -167,15 +193,15 @@ ALTER TABLE `managers`
 --
 ALTER TABLE `projects`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `type_id` (`type_id`);
+  ADD KEY `IDX_5C93B3A4C54C8C93` (`type_id`);
 
 --
 -- A tábla indexei `project_developers`
 --
 ALTER TABLE `project_developers`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `project_id` (`project_id`),
-  ADD KEY `developer_id` (`developer_id`);
+  ADD KEY `IDX_131735E864DD9267` (`developer_id`),
+  ADD KEY `IDX_131735E8166D1F9C` (`project_id`);
 
 --
 -- A tábla indexei `project_types`
@@ -188,12 +214,18 @@ ALTER TABLE `project_types`
 --
 ALTER TABLE `tasks`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `project_id` (`project_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `IDX_50586597166D1F9C` (`project_id`),
+  ADD KEY `IDX_50586597A76ED395` (`user_id`);
 
 --
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
+
+--
+-- AUTO_INCREMENT a táblához `admins`
+--
+ALTER TABLE `admins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT a táblához `developers`
@@ -217,7 +249,7 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT a táblához `project_developers`
 --
 ALTER TABLE `project_developers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT a táblához `project_types`
@@ -229,7 +261,7 @@ ALTER TABLE `project_types`
 -- AUTO_INCREMENT a táblához `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -239,21 +271,21 @@ ALTER TABLE `tasks`
 -- Megkötések a táblához `projects`
 --
 ALTER TABLE `projects`
-  ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `project_types` (`id`);
+  ADD CONSTRAINT `FK_5C93B3A4C54C8C93` FOREIGN KEY (`type_id`) REFERENCES `project_types` (`id`);
 
 --
 -- Megkötések a táblához `project_developers`
 --
 ALTER TABLE `project_developers`
-  ADD CONSTRAINT `project_developers_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
-  ADD CONSTRAINT `project_developers_ibfk_2` FOREIGN KEY (`developer_id`) REFERENCES `developers` (`id`);
+  ADD CONSTRAINT `FK_131735E8166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
+  ADD CONSTRAINT `FK_131735E864DD9267` FOREIGN KEY (`developer_id`) REFERENCES `developers` (`id`);
 
 --
 -- Megkötések a táblához `tasks`
 --
 ALTER TABLE `tasks`
-  ADD CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
-  ADD CONSTRAINT `tasks_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `managers` (`id`);
+  ADD CONSTRAINT `FK_50586597166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
+  ADD CONSTRAINT `FK_50586597A76ED395` FOREIGN KEY (`user_id`) REFERENCES `managers` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

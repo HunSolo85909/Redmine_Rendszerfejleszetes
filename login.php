@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +14,7 @@
             <h2 class="text-center mb-4">Redmine Login</h2>
             <form>
               <div class="form-group">
-                <label for="username">Email adress</label>
+                <label for="email">Email adress</label>
                 <input type="email" class="form-control" id="email" placeholder="Enter email">
               </div>
               <div class="form-group">
@@ -26,10 +25,12 @@
             </form>
           </div>
         </div>
-      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/login.js"></script>
 </body>
 </html>

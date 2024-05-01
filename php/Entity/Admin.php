@@ -14,8 +14,8 @@ use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity]
-#[Table('managers')]
-class Manager
+#[Table('admins')]
+class Admin
 {
     #[Id]
     #[Column, GeneratedValue]
@@ -29,8 +29,6 @@ class Manager
     #[Column]
     private string $password;
 
-    #[OneToMany(mappedBy:"user", targetEntity: Project::class)]
-    private $projects;
     public function getId(): int
     {
         return $this->id;
@@ -51,7 +49,6 @@ class Manager
         return $this->password;
     }
 
-    
     public function setPassword(string $password): void
     {
         $this->password = $password;
@@ -68,12 +65,11 @@ class Manager
 
     public function expose() {
         //return get_object_vars($this);
-        
         $array=[
             'id'=>$this->id,
             'name'=>$this->name,
             'email'=>$this->email,
-            'password'=>$this->password,
+            'password'=>$this->password
         ];
         return $array;
     }

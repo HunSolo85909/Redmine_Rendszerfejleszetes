@@ -1,23 +1,24 @@
-<!DOCTYPE html>
+
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redmine</title>
+    <title>Redmine Manager</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="css/index.css" type="text/css">
 </head>
 <body>
     
-    
-
     <div class="container-fluid">
         <div class="row" id="toolBar">
             <button type="button" id="logOut">Logout</button>
+            <span class="d-block ml-auto"><b id="welcome">Logged in as 
+            </b></span>
+            
         </div>
         <div class="row form-group">
             <div class="col-12">
-                <h6 class="d-block my-3">Search in projects</h6>
+                <h6 class="d-block my-3">Search in projects by category</h6>
             </div>
             <div class="col-12">
                 <select class="form-control" id="projectTypeSelect">
@@ -38,7 +39,7 @@
                             <h3 class="d-block mx-auto mt-3">RedMine Application</h3>
                         </div>
                         <div class="col-12">
-                            <h6 class="d-block my-3">Projects in progress:</h6>
+                            <h6 class="d-block my-3">Projects in progress in the selected category</h6>
                         </div>
                         <div class="col-12">
                             <select class="form-control" id="projectSelect">

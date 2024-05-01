@@ -100,7 +100,8 @@ class Task
         "description"=>$this->getDescription(),
         "pid"=>$this->getProject()->getId(),
         "pname"=>$this->getProject()->getName(),
-        "userid"=>$this->getUser()->getId(),
+        //"userid"=>$this->getUser()->getId(),
+        "userid"=> $this->getUser()->expose(),
         "deadline"=>$this->getDeadline()->format("Y-m-d H:i:s")];
         return $array;
     }

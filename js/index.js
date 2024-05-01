@@ -9,11 +9,65 @@ let saveDevButton=document.getElementById("devSave");
 let devs=document.getElementById("developers");
 
 let futott=false;
-let user;
+
+var entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  };
+  
+function escapeHtml (string) {
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+      return entityMap[s];
+    });
+}
+
+function parseJwt(token)
+{
+    try
+    {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c)
+        {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    
+        return JSON.parse(jsonPayload);
+    }
+    catch(e){
+        alert("Unauthorized!");
+        this.document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href="login.php";
+        return null;
+    }
+}
+
+const getCookieValue = (name) => (
+    document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
+)
+
+function authCheck()
+{
+    let token=getCookieValue("jwt");
+    let user=parseJwt(token);
+    if(user["data"]["role"]!="Manager")
+    {
+        alert("You are not a manager!");
+        window.location.href="login.php";
+    }
+    return user;
+}
 
 async function projektLeker()
 {
     try{
+        authCheck();
         if(selectType.value=="-1")
         {
             let valasz=await fetch("php/index.php/projektOsszesLeker");
@@ -85,6 +139,7 @@ function gombCreate()
 async function projektTipusLeker()
 {
     try{
+        authCheck();
         let valasz=await fetch("php/index.php/projektTipusLeker");
         let adatok=await valasz.json();
         projektTipusKiir(adatok);
@@ -110,6 +165,7 @@ function projektTipusKiir(adatok)
 async function taskLeker()
 {
     try{
+        authCheck();
         buttonview.innerHTML="";
         let adatKuldes = {
             "projektSzam": selectProject.value,
@@ -163,16 +219,15 @@ function projektTaskKiir(adatok)
 async function taskHozzaad()
 {
     try{
-        buttonview.innerHTML="";
-        let name=document.getElementById("name").value;
-        let desc=document.getElementById("desc").value.trim();
-        let date=document.getElementById("date").value;
+        authCheck();
+        let name=escapeHtml(document.getElementById("name").value);
+        let desc=escapeHtml(document.getElementById("desc").value.trim());
+        let date=escapeHtml(document.getElementById("date").value);
         let adatKuldes = {
             "nev": name,
             "leiras": desc,
             "datum": date,
             "projektSzam": selectProject.value,
-            "userID":sessionStorage.getItem("userID")
         };
         let valasz = await fetch("php/index.php/projektTaskFeltolt", {
             method: 'POST',
@@ -193,14 +248,9 @@ async function managerTaskLeker()
 {
     try
     {
-        let adatKuldes={
-            "userID":sessionStorage.getItem("userID")
-        };
-        let valasz = await fetch("php/index.php/managerTaskLeker", {
-            method: 'POST',
-            body: JSON.stringify(adatKuldes)
-        });
-        let adatok = await valasz.json();
+        authCheck();
+        let valasz=await fetch("php/index.php/managerTaskLeker");
+        let adatok=await valasz.json();
         managerTaskKiir(adatok);
     }
     catch(e)
@@ -249,6 +299,7 @@ function managerTaskKiir(adatok)
 
 async function devLeker()
 {
+    authCheck();
     let adatKuldes={
         "projektSzam":selectProject.value
     };
@@ -282,6 +333,7 @@ function devKiir(adatok)
 
 async function devHozzaad()
 {
+    authCheck();
     if(devs.value=="-1" || selectProject.value=="-1")
     {
         alert("Invalid developer or project!");
@@ -300,22 +352,38 @@ async function devHozzaad()
 }
 
 window.addEventListener("load",function(){
-    if(!sessionStorage.getItem("userID"))
-    {
-        window.location.href="login.html";
-    }
-    else
-    {
-        projektLeker();
-        projektTipusLeker();
-        managerTaskLeker();
-    }
+    let user=authCheck();
+    let welcome=document.getElementById("welcome");
+    welcome.innerHTML="You are logged in as "+user["data"]["name"]+"!";
+    projektLeker();
+    projektTipusLeker();
+    managerTaskLeker();
 });
+
+async function logout()
+{
+    try{
+        let valasz=await fetch("php/index.php/userLogout");
+        let adatok=await valasz.json();
+        if(adatok.valasz="siker!")
+        {
+            window.location.href="login.php";
+        }
+        else
+        {
+            alert("Logout failed!");
+        }
+    }
+    catch(e)
+    {
+        console.log(e);
+    }
+}
 
 selectProject.addEventListener("change",taskLeker);
 selectType.addEventListener("change",projektLeker);
 saveTaskButton.addEventListener("click",taskHozzaad);
 saveDevButton.addEventListener("click",devHozzaad);
 logoutButton.addEventListener("click",function(){
-    window.location.href="login.html";
+    logout();
 });
