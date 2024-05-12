@@ -1,3 +1,10 @@
+try {
+    socket = new WebSocket("ws://localhost:8080");
+}
+catch(e) {
+    console.log("Websocket connection failed!");
+}
+
 let selectType=document.getElementById("projectTypeSelect");
 let selectProject=document.getElementById("projectSelect");
 let taskview=document.getElementById("taskView");
@@ -48,20 +55,33 @@ function parseJwt(token)
     }
 }
 
-const getCookieValue = (name) => (
-    document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
-)
+function getCookieValue(name)
+{
+    return document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '';
+}
 
 function authCheck()
 {
     let token=getCookieValue("jwt");
     let user=parseJwt(token);
-    if(user["data"]["role"]!="Manager")
+    if(managerCheck(user)==true)
+        return user;
+    else
     {
         alert("You are not a manager!");
+        this.document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         window.location.href="login.php";
+        return null;
     }
-    return user;
+}
+
+function managerCheck(user)
+{
+    if(user["data"]["role"]!="Manager")
+    {
+       return false;
+    }
+    return true;
 }
 
 async function projektLeker()
@@ -234,9 +254,12 @@ async function taskHozzaad()
             body: JSON.stringify(adatKuldes)
         });
         let adatok = await valasz.json();
-        alert(adatok.valasz);
-        taskLeker();
-        managerTaskLeker();
+        //alert(adatok.valasz);
+        socket.send(JSON.stringify({
+            "action": "taskFeltolt"
+        }));
+        //taskLeker();
+        //managerTaskLeker();
     }
     catch(e)
     {
@@ -353,6 +376,8 @@ async function devHozzaad()
 
 window.addEventListener("load",function(){
     let user=authCheck();
+    if(user==null)
+        return;
     let welcome=document.getElementById("welcome");
     welcome.innerHTML="You are logged in as "+user["data"]["name"]+"!";
     projektLeker();
@@ -377,6 +402,28 @@ async function logout()
     catch(e)
     {
         console.log(e);
+    }
+}
+
+socket.onopen = function(e) {
+    console.log("[open] Connection established");
+};
+
+socket.onmessage = function(event) {
+
+    let data=JSON.parse(event.data);
+
+    if(data.action=="taskTorol")
+    {
+        alert(`Task ${data.taskID} removed!`);
+        taskLeker();
+        managerTaskLeker();
+    }
+    else if(data.action=="taskFeltolt")
+    {
+        alert("Task added!");
+        taskLeker();
+        managerTaskLeker();
     }
 }
 

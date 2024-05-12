@@ -532,7 +532,7 @@ class Redmine {
         $task1->setDescription('auto tests');
         $task1->setProject($project1);
         $task1->setUser($manager1);
-        $task1->setDeadline(new \DateTime('2024-04-25 00:00:00'));
+        $task1->setDeadline(new \DateTime('2024-05-19 00:00:00'));
         $this->manager->persist($task1);
 
         $task2 = new Task();
@@ -540,7 +540,7 @@ class Redmine {
         $task2->setDescription('Backend with php');
         $task2->setProject($project2);
         $task2->setUser($manager1);
-        $task2->setDeadline(new \DateTime('2024-04-30 00:00:00'));
+        $task2->setDeadline(new \DateTime('2024-05-25 00:00:00'));
         $this->manager->persist($task2);
 
         $task3 = new Task();
@@ -548,7 +548,7 @@ class Redmine {
         $task3->setDescription('Frontend for the website');
         $task3->setProject($project2);
         $task3->setUser($manager2);
-        $task3->setDeadline(new \DateTime('2024-05-12 00:00:00'));
+        $task3->setDeadline(new \DateTime('2024-06-01 00:00:00'));
         $this->manager->persist($task3);
 
         $admin1=new Admin();

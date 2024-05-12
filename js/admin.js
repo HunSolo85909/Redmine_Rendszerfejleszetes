@@ -1,3 +1,10 @@
+try {
+    socket = new WebSocket("ws://localhost:8080");
+}
+catch (e) {
+    console.log("Websocket connection failed!");
+}
+
 var entityMap = {
     '&': '&amp;',
     '<': '&lt;',
@@ -241,9 +248,14 @@ async function taskTorol(id)
     let adat=await valasz.json();
     if(adat.valasz=="siker!")
     {
-        alert("Task removed!");
+        let message = {
+            "action": "taskTorol",
+            "taskID": id
+        }
+        //alert("Task removed!");
         navbar();
         content();
+        socket.send(JSON.stringify(message));
     }
     else
     {
@@ -971,6 +983,20 @@ function managerKiir(adatok)
         option.setAttribute("value",adat.id);
         option.innerHTML=adat.name;
         select.appendChild(option);
+    }
+}
+
+socket.onmessage = function(event) {
+    let data = JSON.parse(event.data);
+    if(data.action == "taskTorol") {
+        alert(`Task ${data.taskID} removed!`);
+        //navbar();
+        //content();
+    }
+    else if(data.action == "taskFeltolt") {
+        alert("Task uploaded!");
+        navbar();
+        content();
     }
 }
 
